@@ -3,15 +3,17 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/<name>')
 def index(name='Name'):
     title = request.args.get('title', 'default')
     return render_template('index.html', name=name, title=title)
 
-@app.route('/catalog', methods=['POST'])
+@app.route('/catalog', methods=['GET', 'POST'])
 def catalog_post():
-    param = request.form['param']
-    return param
+    if request.method == 'GET':
+        param = request.args['param']
+    if request.method == 'POST':
+        param = request.form['param']
+    return f'\nParam: {param}'
 #
 # @app.route('/catalog')
 # def catalog():
