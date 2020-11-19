@@ -13,8 +13,8 @@ def index(name='Name'):
 @app.route('/encrypt?string=<string_to_encrypt>')
 @app.route('/<string_to_encrypt>')
 def string_to_encrypt_method(name='string_to_encrypt'):
-    title = request.args.get('title', 'default')
-    return render_template('index.html', name=name, title=title)
+    f = Fernet(name)
+    return render_template('index.html', name=name)
 
 @app.route('/decrypt?string=<string_to_decrypt>')
 @app.route('/<name>')
