@@ -6,12 +6,6 @@ app = Flask(__name__)
 key = Fernet.generate_key()
 f = Fernet(key)
 
-@app.route('/')
-@app.route('/<name>')
-def index(name='Name'):
-    title = request.args.get('title', 'default')
-    return render_template('index.html', name=name, title=title)
-
 @app.route('/encrypt')
 def string_to_encrypt_method():
     title = request.args.get('param', 'default')
@@ -21,12 +15,15 @@ def string_to_encrypt_method():
 
 @app.route('/decrypt')
 def string_to_decrypt_method():
-    title = request.args.get('param', 'default')
-    dec = f.decrypt(title)
-    return render_template('index.html', name=dec, title=title)
+    title_dec = request.args.get('param', 'default')
+    list_title = list(title_dec)
+    new_list = []
+    for i in list_title:
+        if i == '%':
+            new_list.append('\'')
+        else:
+            new_list.append(i)
+    dec = f.decrypt("".join(new_list))
+    return render_template('index.html', name=dec.decode())
 
-@app.route('/catalog')
-def catalog():
-    return "catalog!!!"
-
-app.run(debug=True, port=5009)
+app.run(debug=True, port=5003)
